@@ -231,7 +231,7 @@ def _updateA(X,n, A, R, P, lmbdaA, mu):
     F = zeros((m, rank), dtype=A.dtype)
     E = zeros((rank, rank), dtype=A.dtype)
 
-    An = A[n].reshape((1,2)) # I think this is the correct csr 
+    An = A[n].reshape((1,rank)) # I think this is the correct csr 
     AtA = dot(An.T, An) # should be a scalar
 
     for i in range(len(X)):
@@ -259,7 +259,7 @@ def _updateA(X,n, A, R, P, lmbdaA, mu):
 def _updateR(X,n,A, R,lmbdaR,mu):
     _log.debug('Updating R (SVD) lambda R: %s' % str(lmbdaR))
     rank = A.shape[1]
-    An = A[n].reshape((1,2))
+    An = A[n].reshape((1,rank))
     for i in range(len(R)):
         Xn = X[i].getrow(n)# the chosen stochastic instance
         Shat = An.dot(R[i]) # take the kronecker product for the stochastic gradient instance
