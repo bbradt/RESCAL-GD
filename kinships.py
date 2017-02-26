@@ -11,8 +11,8 @@ from numpy.random import shuffle
 from scipy.io.matlab import loadmat
 from scipy.sparse import lil_matrix
 from sklearn.metrics import precision_recall_curve, auc
-from rescal_sgd import sgd
-from rescal_sgd import gd
+from rescal_gd import sgd
+from rescal_gd import gd
 
 def predict_rescal_als(T):
     A, R, _, _, _ = gd(
