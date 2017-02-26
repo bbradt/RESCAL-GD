@@ -15,7 +15,6 @@ Proceedings of the 28th International Conference on Machine Learning (ICML'11),
 CURRENTLY:
 Rescal with non-stochastic gradient-descent performs comparably to rescal als, converging in an average of 24 iterations 
 without using inverses or kronecker products, thus significantly reducing complexity without requiring the removal of regularization. 
-Note that I have altered the loss function to reflect that in the above paper.  
 
 Stochastic Gradient descent converges with no regularization and very small learning rate; however, it takes 1000+ iterations to 
 converge, and is thus not yet very feasible. Batch-SGD, more rigorous hyper-parameter searching might, and further debugging 

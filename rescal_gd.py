@@ -1,5 +1,5 @@
 # coding: utf-8
-# rescal.py - python script to compute the RESCAL tensor factorization via Stochastic Gradient descent
+# rescal.py - python script to compute the RESCAL tensor factorization via Stochastic Gradient descent and Gradient Descent
 # Original RESCAL Scripts for Alternating Least Squared are 
 # Copyright (C) 2013 Maximilian Nickel <mnick@mit.edu>
 #	
@@ -449,6 +449,7 @@ def _sgdUpdateA(X,n, A, R, P, lmbdaA, mu):
 
 # ------------------ Stochastic Gradient Update R ------------------------------------------------
 def _sgdUpdateR(X,n,A, R,lmbdaR,mu):
+	"""Stochastic-Gradient Update step for R"""
 	_log.debug('Updating R (SVD) lambda R: %s' % str(lmbdaR))
 	rank = A.shape[1]
 	An = A[n].reshape((1,rank))
@@ -467,16 +468,10 @@ def _gdUpdateA(X,A, R, P, lmbdaA, mu):
 	gradientA = zeros((m, rank), dtype=A.dtype)
 	
 	for i in range(len(X)):
-		Xn = X[i]#.getcol(n)
-		Loss = Xn - A.dot(dot(R[i],A.T))
-		chRule = - ((R[i].T).dot((A.T).dot(Loss))).T
+		Loss = X[i] - A.dot(dot(R[i],A.T))
+		chRule = - ((R[i].T).dot((A.T).dot(Loss))).T #chain rule term 
 		gradientA += chRule 
 	gradientA += lmbdaA
-	
-	# attributes - TODO - need SGD rules for attributes?
-	#for i in range(len(Z)):
-	#	 F += P[i].dot(Z[i].T)
-	#	 E += dot(Z[i], Z[i].T)
 
 	A = A - mu * gradientA
 	#_log.debug('Updated A lambda_A:%f, dtype:%s' % (lmbdaA, A.dtype))
@@ -484,33 +479,14 @@ def _gdUpdateA(X,A, R, P, lmbdaA, mu):
 
 # ------------------ Full Gradient Update R ------------------------------------------------
 def _gdUpdateR(X,A, R,lmbdaR,mu):
+	"""Full-Gradient Update step for R"""
 	_log.debug('Updating R (SVD) lambda R: %s' % str(lmbdaR))
 	for i in range(len(R)):
-		Xn = X[i]#.getcol(n)# the chosen stochastic instance
-		Loss = Xn - A.dot(dot(R[i],A.T))
+		Loss = X[i] - A.dot(dot(R[i],A.T))
 		gradientRn = -((A.T).dot(Loss)).dot(A) + lmbdaR
 		R[i] = R[i] - mu*gradientRn
 	return R
 	
-
-# ------------------ Update Z ------------------------------------------------
-# SHOULD NOT NEED THIS FOR SGD
-'''
-def _updateZ(A, P, lmbdaZ):
-	Z = []
-	if len(P) == 0:
-		return Z
-	#_log.debug('Updating Z (Norm EQ, %d)' % len(P))
-	pinvAt = inv(dot(A.T, A) + lmbdaZ * eye(A.shape[1], dtype=A.dtype))
-	pinvAt = dot(pinvAt, A.T).T
-	for i in range(len(P)):
-		if issparse(P[i]):
-			Zn = P[i].tocoo().T.tocsr().dot(pinvAt).T
-		else:
-			Zn = dot(pinvAt.T, P[i])
-		Z.append(Zn)
-	return Z
-'''
 
 def _compute_fit(X, A, R, P,lmbdaA, lmbdaR):
 	"""Compute fit for full slices"""
@@ -522,11 +498,6 @@ def _compute_fit(X, A, R, P,lmbdaA, lmbdaR):
 	for i in range(len(X)):
 		ARAt = dot(A, dot(R[i], A.T))
 		f += norm(X[i] - ARAt) ** 2
-		f += lmbdaR *norm(R[i])
+		f += lmbdaR *norm(R[i]) #NOTE THE ADDITION OF REGULARIZATION TERMS, WHICH WERE NOT INCLUDED IN ORIGINAL CODE
 	f += lmbdaA*norm(A)
-	#print(f)
-	#print(sumNorm)
-	#print(f/sumNorm)
-	#print(abs(1-f/sumNorm))
-	#exit()
 	return (1-f/sumNorm)
