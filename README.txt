@@ -1,4 +1,4 @@
-RESCAL-SGD v 0.0.1
+RESCAL-GD v 0.0.1
 
 This is an implementation of Nickel 2011 RESCAL using Stochastic Gradient Descent 
 rather than the vanilla Alternating Least Squares. 
