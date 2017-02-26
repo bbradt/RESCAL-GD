@@ -5,7 +5,7 @@ import os
 import sys
 from pkg_resources import require
 
-DISTNAME = 'rescal_sgd'
+DISTNAME = 'rescal_gd'
 DESCRIPTION = descr
 LONG_DESCRIPTION = descr
 MAINTAINER = 'Brad Baker',
@@ -13,7 +13,7 @@ MAINTAINER_EMAIL = 'baker@ismll.de',
 URL = 'http://github.com/bbradt/RESCAL-SGD'
 LICENSE = 'GPLv3'
 DOWNLOAD_URL = URL
-PACKAGE_NAME = 'rescal_sgd'
+PACKAGE_NAME = 'rescal_gd'
 EXTRA_INFO = dict(
     classifiers=[
         "Development Status :: 4 - Beta",

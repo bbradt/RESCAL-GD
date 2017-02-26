@@ -40,4 +40,5 @@ For a full description of the algorithm see:
        WWW 2012, Lyon, France
 """
 
-from .rescal_sgd import sgd as rescal_sgd
+from .rescal_gd import sgd as rescal_sgd
+from .rescal_gd import gd as rescal_gd
